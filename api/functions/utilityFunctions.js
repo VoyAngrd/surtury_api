@@ -8,6 +8,11 @@ function isObjectEmpty(object) {
     return true;
 }
 
+function currentLocalDate() {
+    return new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"})
+}
+
 module.exports = {
-    isObjectEmpty
+    isObjectEmpty,
+    currentLocalDate
 }
