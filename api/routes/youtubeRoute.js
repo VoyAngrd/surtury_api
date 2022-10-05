@@ -17,4 +17,16 @@ routes.get('/youtube/channel-video-list', (req, res) => {
     })
 })
 
+routes.get('/youtube/nightbot-message', (req, res) => {
+    if (youtube.nightbotMessage) {
+        return res.status(200).json({
+            "message": youtube.nightbotMessage
+        })
+    }
+
+    return res.status(200).json({
+        "message": youtube.nightbotDefaultMessage
+    })
+})
+
 module.exports = routes
