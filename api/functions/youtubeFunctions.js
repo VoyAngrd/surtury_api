@@ -1,5 +1,5 @@
 const usetube = require('usetube')
-const { isObjectEmpty, currentLocalDate } = require('./utilityFunctions')
+const { isObjectEmpty, currentLocalDate, timelessDate } = require('./utilityFunctions')
 const { sub } = require('date-fns')
 
 var channelVideoList = [{}]
@@ -20,6 +20,7 @@ async function getChannelVideos(publishedAfter) {
 
 async function createVideoList() {
     if (await getChannelVideos()) {
+        updateNightbotMessage()
         return console.log(`The video list has been created (${currentLocalDate()})`)
     }
 
@@ -41,6 +42,7 @@ async function updateVideoList() {
     }
 
     if (await getChannelVideos(sub(channelVideoList[0].publishedAt, {days: 1}))) {
+        updateNightbotMessage()
         return console.log(`The video list has been updated (${currentLocalDate()})`)
     }
 
@@ -48,6 +50,32 @@ async function updateVideoList() {
     console.log(`Trying again in 10 minutes...`)
     return setTimeout(updateVideoList, 600000)
 }
+
+function updateNightbotMessage() {
+    let videoURL = `https://youtu.be/${channelVideoList[0].id}`
+    let videoPublishDate = timelessDate(channelVideoList[0].publishedAt)
+    let today = timelessDate(new Date());
+
+    switch (videoPublishDate) {
+        case today:
+            module.exports.nightbotMessage = `Saiu vídeo novo hoje! Assiste lá depois! ${videoURL}`
+            break
+
+        case sub(today, {days: 1}):
+            module.exports.nightbotMessage = `Saiu vídeo novo ontem! Assiste lá depois! ${videoURL}`
+            break
+
+        case sub(today, {days: 2}):
+            module.exports.nightbotMessage = `Saiu vídeo novo anteontem! Assiste lá depois! ${videoURL}`
+            break
+
+        default:
+            module.exports.nightbotMessage = nightbotDefaultMessage
+            break
+    }
+}
+
+module.exports.nightbotDefaultMessage = `Também faço vídeos para o YouTube! Assiste lá depois! https://www.youtube.com/c/aSuSurtury`
 
 module.exports.start = async () => {
     await createVideoList()
