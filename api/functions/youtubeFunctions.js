@@ -49,8 +49,7 @@ async function updateVideoList() {
     return setTimeout(updateVideoList, 600000)
 }
 
-module.exports = {
-    getChannelVideos,
-    createVideoList,
-    updateVideoList
+module.exports.start = async () => {
+    await createVideoList()
+    setTimeout(updateVideoList, 600000)
 }
