@@ -3,7 +3,7 @@ const { isObjectEmpty, currentLocalDate } = require('./utilityFunctions');
 
 var channelVideoList = [{}]
 
-async function getChannelVideos(publishedAfter = new Date()) {
+async function getChannelVideos(publishedAfter) {
     const channelID = `UCcNST01YviJ0tMunSa0OwTg`
 
     let videoList = await usetube.getChannelVideos(channelID, publishedAfter)
