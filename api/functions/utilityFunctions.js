@@ -12,7 +12,12 @@ function currentLocalDate() {
     return new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"})
 }
 
+function timelessDate(date) {
+    return new Date(new Date(date).toLocaleString("en-US", {timeZone: "America/Sao_Paulo"})).setHours(0, 0, 0, 0)
+}
+
 module.exports = {
     isObjectEmpty,
-    currentLocalDate
+    currentLocalDate,
+    timelessDate
 }
