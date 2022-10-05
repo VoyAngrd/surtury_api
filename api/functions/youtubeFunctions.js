@@ -27,7 +27,7 @@ async function createVideoList() {
     console.log(`Unable to create video list (${currentLocalDate()})`)
     console.log(`Trying again in 10 minutes...`)
 
-    setTimeout(createVideoList, 600000);
+    setTimeout(createVideoList, 600000)
 }
 
 module.exports = {
