@@ -1,5 +1,6 @@
 const usetube = require('usetube')
-const { isObjectEmpty, currentLocalDate } = require('./utilityFunctions');
+const { isObjectEmpty, currentLocalDate } = require('./utilityFunctions')
+const { sub } = require('date-fns')
 
 var channelVideoList = [{}]
 
@@ -30,7 +31,28 @@ async function createVideoList() {
     setTimeout(createVideoList, 600000)
 }
 
+async function updateVideoList() {
+    if (isObjectEmpty(channelVideoList[0])) {
+        console.log(`Video list hasn't been created yet (${currentLocalDate()})`)
+        console.log(`Trying to create...`)
+
+        return async () => {
+            await createVideoList()
+            setTimeout(updateVideoList, 600000)
+        }
+    }
+
+    if (await getChannelVideos(sub(channelVideoList[0].publishedAt, {days: 1}))) {
+        return console.log(`The video list has been updated (${currentLocalDate()})`)
+    }
+
+    console.log(`Unable to update video list (${currentLocalDate()})`)
+    console.log(`Trying again in 10 minutes...`)
+    return setTimeout(updateVideoList, 600000)
+}
+
 module.exports = {
     getChannelVideos,
-    createVideoList
+    createVideoList,
+    updateVideoList
 }
