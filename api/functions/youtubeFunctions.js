@@ -1,13 +1,14 @@
 const usetube = require('usetube')
 const { isObjectEmpty, currentLocalDate } = require('./utilityFunctions');
 
-const channelID = `UCcNST01YviJ0tMunSa0OwTg`
-var channelVideoList = {}
+var channelVideoList = [{}]
 
 async function getChannelVideos(publishedAfter = new Date()) {
+    const channelID = `UCcNST01YviJ0tMunSa0OwTg`
+
     let videoList = await usetube.getChannelVideos(channelID, publishedAfter)
 
-    if (isObjectEmpty(videoList)) {
+    if (isObjectEmpty(videoList[0])) {
         return false
     }
 
