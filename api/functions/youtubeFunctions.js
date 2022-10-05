@@ -75,7 +75,9 @@ function updateNightbotMessage() {
     }
 }
 
-module.exports.nightbotDefaultMessage = `Também faço vídeos para o YouTube! Assiste lá depois! https://www.youtube.com/c/aSuSurtury`
+const nightbotDefaultMessage = `Também faço vídeos para o YouTube! Assiste lá depois! https://www.youtube.com/c/aSuSurtury`
+
+module.exports.nightbotDefaultMessage = nightbotDefaultMessage
 
 module.exports.start = async () => {
     await createVideoList()
