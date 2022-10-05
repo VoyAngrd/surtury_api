@@ -19,9 +19,7 @@ async function getChannelVideos(publishedAfter) {
 }
 
 async function createVideoList() {
-    let success = await getChannelVideos()
-
-    if (success) {
+    if (await getChannelVideos()) {
         return console.log(`The video list has been created (${currentLocalDate()})`)
     }
 
