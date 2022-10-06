@@ -43,7 +43,8 @@ async function updateVideoList() {
 
     if (await getChannelVideos(sub(channelVideoList[0].publishedAt, {days: 1}))) {
         updateNightbotMessage()
-        return console.log(`The video list has been updated (${currentLocalDate()})`)
+        console.log(`The video list has been updated (${currentLocalDate()})`)
+        return setTimeout(updateVideoList, 600000)
     }
 
     console.log(`Unable to update video list (${currentLocalDate()})`)
