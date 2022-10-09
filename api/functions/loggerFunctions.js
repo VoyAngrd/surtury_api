@@ -110,6 +110,14 @@ function error(error) {
     return write({level: `error`, error})
 }
 
+function fatal(error) {
+    if (typeof error === `string`) {
+        return write({level: `fatal`, message: error})
+    }
+    
+    return write({level: `fatal`, error})
+}
+
 module.exports = {
     read,
     access,
@@ -117,5 +125,6 @@ module.exports = {
     debug,
     system,
     info,
-    error
+    error,
+    fatal
 }
