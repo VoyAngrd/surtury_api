@@ -90,8 +90,13 @@ function warn(message) {
     return write({level: `warn`, message})
 }
 
+function debug(message) {
+    return write({level: `debug`, message})
+}
+
 module.exports = {
     read,
     access,
-    warn
+    warn,
+    debug
 }
