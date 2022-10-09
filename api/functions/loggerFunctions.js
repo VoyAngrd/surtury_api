@@ -86,7 +86,12 @@ function access(message) {
     return write({level: `access`, message})
 }
 
+function warn(message) {
+    return write({level: `warn`, message})
+}
+
 module.exports = {
     read,
-    access
+    access,
+    warn
 }
