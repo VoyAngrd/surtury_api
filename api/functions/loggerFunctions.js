@@ -98,10 +98,15 @@ function system(message) {
     return write({level: `system`, message})
 }
 
+function info(message) {
+    return write({level: `info`, message})
+}
+
 module.exports = {
     read,
     access,
     warn,
     debug,
-    system
+    system,
+    info
 }
