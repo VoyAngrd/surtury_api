@@ -82,6 +82,11 @@ async function read(fileName = null) {
     })
 }
 
+function access(message) {
+    return write({level: `access`, message})
+}
+
 module.exports = {
-    read
+    read,
+    access
 }
