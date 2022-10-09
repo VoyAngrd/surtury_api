@@ -1,7 +1,11 @@
 const chalk = require('chalk')
-const { existsSync, mkdirSync, appendFileSync } = require('node:fs')
+const path = require('node:path')
+const readLine = require('node:readline')
+const { existsSync, mkdirSync, appendFileSync, createReadStream } = require('node:fs')
 const { currentLocalDate } = require('./utilityFunctions')
 const config = require('../config/loggerConfig')
+
+var logsDir = `./logs`
 
 function getLevelName(level) {
     return level && config.levels.hasOwnProperty(level) ? level : `info`
@@ -20,8 +24,6 @@ function writeToConsole(levelName, message, error = null) {
 }
 
 function writeToFile(levelName, message) {
-    let logsDir = `./logs`
-
     let data = `{"level": "${levelName.toUpperCase()}", "message": "${message}", "timestamp": "${currentLocalDate()}"}\r\n`
 
     if (!existsSync(logsDir)) {
@@ -46,4 +48,40 @@ function write(options) {
     if (config.levels[levelName].writeToFile) {
         writeToFile(levelName, message, error)
     }
+}
+
+async function read(fileName = null) {
+    return new Promise((resolve, reject) => {
+
+        let file = path.join(
+            logsDir,
+            `${fileName}.log`
+        )
+
+        let lineReader = readLine.createInterface({
+            input: createReadStream(file)
+        })
+
+        let logs = []
+
+        lineReader.on('line', (line) => {
+            logs.push(JSON.parse(line))
+        })
+
+        lineReader.on('close', () => {
+            console.log(
+                chalk.yellow(`${fileName.toUpperCase()} logs have been accessed!`)
+            )
+            console.table(logs)
+            resolve(logs)
+        })
+
+        lineReader.on('error', (error) => {
+            reject(error)
+        })
+    })
+}
+
+module.exports = {
+    read
 }
