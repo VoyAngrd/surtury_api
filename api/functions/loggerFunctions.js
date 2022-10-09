@@ -102,11 +102,20 @@ function info(message) {
     return write({level: `info`, message})
 }
 
+function error(error) {
+    if (typeof error === `string`) {
+        return write({level: `error`, message: error})
+    }
+    
+    return write({level: `error`, error})
+}
+
 module.exports = {
     read,
     access,
     warn,
     debug,
     system,
-    info
+    info,
+    error
 }
