@@ -1,4 +1,5 @@
 const chalk = require('chalk')
+const { existsSync, mkdirSync, appendFileSync } = require('node:fs')
 const { currentLocalDate } = require('./utilityFunctions')
 const config = require('../config/loggerConfig')
 
@@ -16,4 +17,21 @@ function writeToConsole(levelName, message, error = null) {
     let header = `[${levelName.toUpperCase()}] (${currentLocalDate()})`
 
     console.log(`${chalkFunction(header)}: ${chalkFunction(message)}`)
+}
+
+function writeToFile(levelName, message) {
+    let logsDir = `./logs`
+
+    let data = `{"level": "${levelName.toUpperCase()}", "message": "${message}", "timestamp": "${currentLocalDate()}"}\r\n`
+
+    if (!existsSync(logsDir)) {
+        mkdirSync(logsDir)
+    }
+
+    let options = {
+        encoding: `UTF8`,
+        mode: 438
+    }
+
+    appendFileSync(`${logsDir}/${levelName}.log`, data, options)
 }
