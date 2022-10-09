@@ -94,9 +94,14 @@ function debug(message) {
     return write({level: `debug`, message})
 }
 
+function system(message) {
+    return write({level: `system`, message})
+}
+
 module.exports = {
     read,
     access,
     warn,
-    debug
+    debug,
+    system
 }
