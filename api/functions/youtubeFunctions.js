@@ -1,5 +1,6 @@
 const usetube = require('usetube')
-const { isObjectEmpty, currentLocalDate, timelessDate } = require('./utilityFunctions')
+const { isObjectEmpty, timelessDate } = require('./utilityFunctions')
+const log = require('./loggerFunctions')
 const { sub } = require('date-fns')
 
 var channelVideoList = [{}]
@@ -21,19 +22,19 @@ async function getChannelVideos(publishedAfter) {
 async function createVideoList() {
     if (await getChannelVideos()) {
         updateNightbotMessage()
-        return console.log(`The video list has been created (${currentLocalDate()})`)
+        return log.debug(`The video list has been created`)
     }
 
-    console.log(`Unable to create video list (${currentLocalDate()})`)
-    console.log(`Trying again in 10 minutes...`)
+    log.error(`Unable to create video list`)
+    log.info(`Trying again in 10 minutes...`)
 
     setTimeout(createVideoList, 600000)
 }
 
 async function updateVideoList() {
     if (isObjectEmpty(channelVideoList[0])) {
-        console.log(`Video list hasn't been created yet (${currentLocalDate()})`)
-        console.log(`Trying to create...`)
+        log.warn(`Video list hasn't been created yet`)
+        log.info(`Trying to create...`)
 
         return async () => {
             await createVideoList()
@@ -43,12 +44,12 @@ async function updateVideoList() {
 
     if (await getChannelVideos(sub(channelVideoList[0].publishedAt, {days: 1}))) {
         updateNightbotMessage()
-        console.log(`The video list has been updated (${currentLocalDate()})`)
+        log.debug(`The video list has been updated`)
         return setTimeout(updateVideoList, 600000)
     }
 
-    console.log(`Unable to update video list (${currentLocalDate()})`)
-    console.log(`Trying again in 10 minutes...`)
+    log.error(`Unable to update video list`)
+    log.info(`Trying again in 10 minutes...`)
     return setTimeout(updateVideoList, 600000)
 }
 
