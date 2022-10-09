@@ -35,3 +35,15 @@ function writeToFile(levelName, message) {
 
     appendFileSync(`${logsDir}/${levelName}.log`, data, options)
 }
+
+function write(options) {
+    let levelName = getLevelName(options.level)
+    let message = options.message ?? `Unidentified error`
+    let error = options.error ?? null
+
+    writeToConsole(levelName, message, error)
+
+    if (config.levels[levelName].writeToFile) {
+        writeToFile(levelName, message, error)
+    }
+}
